@@ -1,0 +1,6 @@
+setup.py
+KalibrateLib/__init__.py
+KalibrateLib.egg-info/PKG-INFO
+KalibrateLib.egg-info/SOURCES.txt
+KalibrateLib.egg-info/dependency_links.txt
+KalibrateLib.egg-info/top_level.txt
