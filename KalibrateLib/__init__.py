@@ -1,4 +1,8 @@
 from .modulo1 import mi_funcion
 
-def saludo():
-    return "Hola desde KalibrateLib"
+def OSVersion():
+    det = f"Version 1.0 =============
+            Libreria para agilizar el uso de las api de kalibrate
+            USO:
+            "
+    return det
