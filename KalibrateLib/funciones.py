@@ -53,7 +53,12 @@ def getColumnsGlobal(rawdata):
 
 def getColumnsSite(rawdata):
     extracted_data = []
+    
+
     for item in rawdata:
+        id_ = item["id"].get("entityId") #id para las subtablas competitors sites y groupings
+        extracted_comp_sites =[]
+        extracted_comp_groups =[]
         data_dic ={
             "EntityId":item["id"].get("entityId"),
             "Adress":item['data'].get('address'),
@@ -64,14 +69,41 @@ def getColumnsSite(rawdata):
             "Latitud":item['data'].get('latitude'),
             "Longitud":item['data'].get('longitude'),
             "name":item['data'].get('name'),
-            "competitorSites":item['data'].get('competitorSites'),
             "achievedVolume":item['data'].get('achievedVolume'),
             "areaEntityId":item['data']['area'].get('entityId'),
             "brandEntityId":item['data']['brand'].get('entityId'),
             "channelOfTradeEntityId":item['data']['channelOfTrade'].get('entityId'),
-            "siteGroupings":item['data'].get('siteGroupings'),
             "distanceToNearestOwnSite":item['data'].get('distanceToNearestOwnSite'),
             "SiteType2":item['id'].get('entityVariant')
         }
-        extracted_data.append(data_dic)
+
+        #SITES DE COMPETIDORES
+        rawdata2 = item['data'].get('competitorSites')
+        if rawdata2:
+            for item2 in rawdata2:
+                data_dic2 ={
+                    "EntityId":id_,
+                    "competitorSitesId":item2.get('entityId')
+                }
+                extracted_comp_sites.append(data_dic2)
+
+        #GRUPOS
+        rawdata3 = item['data'].get('siteGroupings')
+        if rawdata3:
+            for item3 in rawdata3:
+                data_dic3 ={
+                    "EntityId":id_,
+                    "name":item3.get('name'),
+                    "type":item3.get('type'),
+                    "optionName":item3.get('optionName')
+                }
+                extracted_comp_groups.append(data_dic3)
+
+        record = {
+            "SiteInfo": data_dic,
+            "CompetitorSites": extracted_comp_sites,
+            "SiteGroupings": extracted_comp_groups
+        }
+
+        extracted_data.append(record)
     return extracted_data
