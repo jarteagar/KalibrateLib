@@ -50,3 +50,28 @@ def getColumnsGlobal(rawdata):
         }
         extracted_data.append(data_dict)
     return extracted_data
+
+def getColumnsSite(rawdata):
+    extracted_data = []
+    for item in rawdata:
+        data_dic ={
+            "EntityId":item["id"].get("entityId"),
+            "Adress":item['data'].get('address'),
+            "Adress2":item['data'].get('address2'),
+            "Adress3":item['data'].get('address3'),
+            "Adress4":item['data'].get('address4'),
+            "networkId":item['data']['network'].get('entityId'),
+            "Latitud":item['data'].get('latitude'),
+            "Longitud":item['data'].get('longitude'),
+            "name":item['data'].get('name'),
+            "competitorSites":item['data'].get('competitorSites'),
+            "achievedVolume":item['data'].get('achievedVolume'),
+            "areaEntityId":item['data']['area'].get('entityId'),
+            "brandEntityId":item['data']['brand'].get('entityId'),
+            "channelOfTradeEntityId":item['data']['channelOfTrade'].get('entityId'),
+            "siteGroupings":item['data'].get('siteGroupings'),
+            "distanceToNearestOwnSite":item['data'].get('distanceToNearestOwnSite'),
+            "SiteType2":item['id'].get('entityVariant')
+        }
+        extracted_data.append(data_dic)
+    return extracted_data
