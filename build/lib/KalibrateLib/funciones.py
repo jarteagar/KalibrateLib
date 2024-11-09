@@ -25,3 +25,16 @@ def getData(urlApi,urlFilter,token):
     else:
         rawdata = json.loads(response.text)
         return rawdata
+
+def getColumnsProd(rawdata):
+    #selecciona unas columnas de toda la cadena de api
+    extracted_data = []
+    for item in rawdata:  
+        data_dict = {
+            "OwnProductId": item["data"].get("ownProductId"),
+            "EntityId": item["id"].get("entityId"),
+            "GlobalProductEntityId": item["data"]["product"].get("entityId"),
+            "SiteId": item["data"]["site"].get("entityId")
+        }
+        extracted_data.append(data_dict)
+    return extracted_data
