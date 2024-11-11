@@ -54,27 +54,26 @@ def getColumnsGlobal(rawdata):
 def getColumnsSite(rawdata):
     extracted_data = []
     
-
     for item in rawdata:
         id_ = item["id"].get("entityId") #id para las subtablas competitors sites y groupings
         extracted_comp_sites =[]
         extracted_comp_groups =[]
-        data_dic ={
-            "EntityId":item["id"].get("entityId"),
-            "Adress":item['data'].get('address'),
-            "Adress2":item['data'].get('address2'),
-            "Adress3":item['data'].get('address3'),
-            "Adress4":item['data'].get('address4'),
-            "networkId":item['data']['network'].get('entityId'),
-            "Latitud":item['data'].get('latitude'),
-            "Longitud":item['data'].get('longitude'),
-            "name":item['data'].get('name'),
-            "achievedVolume":item['data'].get('achievedVolume'),
-            "areaEntityId":item['data']['area'].get('entityId'),
-            "brandEntityId":item['data']['brand'].get('entityId'),
-            "channelOfTradeEntityId":item['data']['channelOfTrade'].get('entityId'),
-            "distanceToNearestOwnSite":item['data'].get('distanceToNearestOwnSite'),
-            "SiteType2":item['id'].get('entityVariant')
+        data_dic = {
+            "EntityId": item.get("id", {}).get("entityId", None),
+            "Adress": item.get('data', {}).get('address', None),
+            "Adress2": item.get('data', {}).get('address2', None),
+            "Adress3": item.get('data', {}).get('address3', None),
+            "Adress4": item.get('data', {}).get('address4', None),
+            "networkId": item.get('data', {}).get('network', {}).get('entityId', None),  # Maneja el caso cuando 'network' no existe
+            "Latitud": item.get('data', {}).get('latitude', None),
+            "Longitud": item.get('data', {}).get('longitude', None),
+            "name": item.get('data', {}).get('name', None),
+            "achievedVolume": item.get('data', {}).get('achievedVolume', None),
+            "areaEntityId": item.get('data', {}).get('area', {}).get('entityId', None),
+            "brandEntityId": item.get('data', {}).get('brand', {}).get('entityId', None),
+            "channelOfTradeEntityId": item.get('data', {}).get('channelOfTrade', {}).get('entityId', None),
+            "distanceToNearestOwnSite": item.get('data', {}).get('distanceToNearestOwnSite', None),
+            "SiteType2": item.get("id", {}).get("entityVariant", None)
         }
 
         #SITES DE COMPETIDORES
