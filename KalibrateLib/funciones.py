@@ -52,6 +52,30 @@ def getColumnsPrice(rawdata):
         extracted_data.append(data_dic)
     return extracted_data
 
+def getColumnsArea(rawdata):
+    extracted_data =[]
+    for item in rawdata:
+        data_dic ={
+            "areaId":item['data'].get('areaId'),
+            "entityId":item['id'].get('entityId'),
+            "name":item['data'].get('name'),
+            "_ts":item['id'].get('_ts')
+        }
+        extracted_data.append(data_dic)
+    return extracted_data
+
+def getColumnsVolumen(rawdata):
+    extracted_data =[]
+    for item in rawdata:
+        data_dic={
+            "idVolume":item['id'].get('entityId'),
+            "idProduct":item['data']['product'].get('entityId'),
+            "volume":item['data'].get('volume'),
+            "startTime":item['data'].get('startTime'),
+            "_ts":item['id'].get('_ts')
+
+        }
+
 def getColumnsGlobal(rawdata):
     #selecciona unas columnas de toda la cadena de api
     extracted_data = []
