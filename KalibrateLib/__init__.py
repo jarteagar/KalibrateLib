@@ -1,7 +1,7 @@
 from .funciones import getToken
 
 def OSVersion():
-    det = """Version 1.4 =============
+    det = """Version 1.5 =============
     Libreria para agilizar el uso de las api de kalibrate
     USO:
     Consultar con John Arteaga
@@ -11,5 +11,15 @@ def OSVersion():
         SiteInfo : data principal del site
         CompetitorSites : informacion sobre 'competitor site' 
         SiteGroupings : informacion sobre 'site grouping'
+    
+    Nota importante _____
+    Para modificar las columnas que se retornan, se debe editar el archivo funciones.py
+    agregar las columnas en la funcion correspondiente y volver a compilar el archivo WHL:
+
+    --> python .\setup.py bdist_wheel
+
+    Publicar en GITHUB para obtener la version linux del archivo WHL y cagar en el Lakehouse
     """
+
+    
     return det

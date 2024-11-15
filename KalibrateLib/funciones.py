@@ -75,6 +75,7 @@ def getColumnsVolumen(rawdata):
             "_ts":item['id'].get('_ts')
 
         }
+    return extracted_data
 
 def getColumnsGlobal(rawdata):
     #selecciona unas columnas de toda la cadena de api
