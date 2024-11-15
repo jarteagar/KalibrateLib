@@ -47,7 +47,8 @@ def getColumnsPrice(rawdata):
            "effectiveTime": item['data'].get("effectiveTime"),
            "idProduct": item['data']['product'].get('entityId'),
            "origin":item['data'].get("origin"),
-           "price":item['data'].get("price")
+           "price": float(item['data'].get("price", 0)) if item['data'].get("price") is not None else None
+           #"price":item['data'].get("price")
         }
         extracted_data.append(data_dic)
     return extracted_data

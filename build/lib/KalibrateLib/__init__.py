@@ -12,10 +12,11 @@ def OSVersion():
         CompetitorSites : informacion sobre 'competitor site' 
         SiteGroupings : informacion sobre 'site grouping'
     
+    Nota importante _____
     Para modificar las columnas que se retornan, se debe editar el archivo funciones.py
     agregar las columnas en la funcion correspondiente y volver a compilar el archivo WHL:
 
-    --> Python setup.py bdist_wheel
+    --> python .\setup.py bdist_wheel
 
     Publicar en GITHUB para obtener la version linux del archivo WHL y cagar en el Lakehouse
     """
