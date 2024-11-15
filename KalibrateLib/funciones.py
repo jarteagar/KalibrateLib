@@ -39,6 +39,19 @@ def getColumnsProd(rawdata):
         extracted_data.append(data_dict)
     return extracted_data
 
+def getColumnsPrice(rawdata):
+    extracted_data=[]
+    for item in rawdata:
+        data_dic ={
+           "priceId":item['data'].get('priceId'),
+           "effectiveTime": item['data'].get("effectiveTime"),
+           "idProduct": item['data']['product'].get('entityId'),
+           "origin":item['data'].get("origin"),
+           "price":item['data'].get("price")
+        }
+        extracted_data.append(data_dic)
+    return extracted_data
+
 def getColumnsGlobal(rawdata):
     #selecciona unas columnas de toda la cadena de api
     extracted_data = []
