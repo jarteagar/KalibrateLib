@@ -76,6 +76,7 @@ def getColumnsVolumen(rawdata):
             "_ts":item['id'].get('_ts')
 
         }
+        extracted_data.append(data_dic)
     return extracted_data
 
 def getColumnsGlobal(rawdata):
@@ -92,11 +93,13 @@ def getColumnsGlobal(rawdata):
 
 def getColumnsSite(rawdata):
     extracted_data = []
-    
+   
     for item in rawdata:
         id_ = item["id"].get("entityId") #id para las subtablas competitors sites y groupings
         extracted_comp_sites =[]
         extracted_comp_groups =[]
+
+        
         data_dic = {
             "EntityId": item.get("id", {}).get("entityId", None),
             "Adress": item.get('data', {}).get('address', None),
