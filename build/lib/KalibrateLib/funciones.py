@@ -71,7 +71,8 @@ def getColumnsVolumen(rawdata):
         data_dic={
             "idVolume":item['id'].get('entityId'),
             "idProduct":item['data']['product'].get('entityId'),
-            "volume":item['data'].get('volume'),
+            "volume": float(item['data'].get("volume", 0)) if item['data'].get("volume") is not None else None,
+            #"volume":item['data'].get('volume'),
             "startTime":item['data'].get('startTime'),
             "_ts":item['id'].get('_ts')
 
