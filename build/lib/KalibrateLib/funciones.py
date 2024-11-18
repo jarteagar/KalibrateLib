@@ -135,6 +135,7 @@ def getColumnsSite(rawdata):
             for item3 in rawdata3:
                 data_dic3 ={
                     "EntityId":id_,
+                    "siteGroupingValueId":item3.get('siteGroupingValueId'),
                     "name":item3.get('name'),
                     "type":item3.get('type'),
                     "optionName":item3.get('optionName')
