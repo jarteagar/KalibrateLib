@@ -39,6 +39,7 @@ def getColumnsProd(rawdata):
         extracted_data.append(data_dict)
     return extracted_data
 
+#precios para el own
 def getColumnsPrice(rawdata):
     extracted_data=[]
     for item in rawdata:
@@ -52,6 +53,7 @@ def getColumnsPrice(rawdata):
         extracted_data.append(data_dic)
     return extracted_data
 
+#precios para el competitor
 def getColumnsPriceCom(rawdata):
     extracted_data=[]
     for item in rawdata:

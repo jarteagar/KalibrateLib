@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="KalibrateLib",                # Nombre del paquete
-    version="0.4",                      # Versión inicial
+    version="0.5",                      # Versión inicial
     description="Descripción de KalibrateLib",  # Breve descripción
     author="Tu Nombre",                 # Autor
     packages=find_packages(),           # Encuentra automáticamente todos los módulos

@@ -1,7 +1,7 @@
 from .funciones import getToken
 
 def OSVersion():
-    det = """Version 0.4 =============
+    det = """Version 0.5 =============
     Libreria para agilizar el uso de las api de kalibrate
     USO:
     Consultar con John Arteaga
