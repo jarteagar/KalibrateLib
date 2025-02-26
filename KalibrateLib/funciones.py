@@ -14,6 +14,18 @@ def getToken(client_id,client_secret,scope,auth_url):
     token = response.json().get('access_token')
     return token
 
+
+def getSubData(urlApi,token):
+    authHeader = {"Authorization": "Bearer %s" %token, 'User-Agent': 'API-CLIENT'}
+    queryURL = f'https://eu2.data.kalibrate.cloud{urlApi}'
+    response = requests.get(queryURL,headers=authHeader)
+
+    if response.status_code != 200:
+        return ""
+    else:
+        rawdata = json.loads(response.text)
+        return rawdata
+
 def getData(urlApi,urlFilter,token):
 
     authHeader = {"Authorization": "Bearer %s" %token, 'User-Agent': 'API-CLIENT'}
@@ -165,3 +177,88 @@ def getColumnsSite(rawdata):
 
         extracted_data.append(record)
     return extracted_data
+
+
+#se modifico esta funcion para ajustar la data del id correcto del Competitor respecto al Own
+def getColumnsSiteOwn(rawdata,token):
+    extracted_data = []
+   
+    for item in rawdata:
+        id_ = item["id"].get("entityId") #id para las subtablas competitors sites y groupings
+        extracted_comp_sites =[]
+        extracted_comp_groups =[]
+
+        
+        data_dic = {
+            "EntityId": item.get("id", {}).get("entityId", None),
+            "Adress": item.get('data', {}).get('address', None),
+            "Adress2": item.get('data', {}).get('address2', None),
+            "Adress3": item.get('data', {}).get('address3', None),
+            "Adress4": item.get('data', {}).get('address4', None),
+            "networkId": item.get('data', {}).get('network', {}).get('entityId', None),  # Maneja el caso cuando 'network' no existe
+            "Latitud": item.get('data', {}).get('latitude', None),
+            "Longitud": item.get('data', {}).get('longitude', None),
+            "name": item.get('data', {}).get('name', None),
+            "achievedVolume": item.get('data', {}).get('achievedVolume', None),
+            "areaEntityId": item.get('data', {}).get('area', {}).get('entityId', None),
+            "brandEntityId": item.get('data', {}).get('brand', {}).get('entityId', None),
+            "channelOfTradeEntityId": item.get('data', {}).get('channelOfTrade', {}).get('entityId', None),
+            "distanceToNearestOwnSite": item.get('data', {}).get('distanceToNearestOwnSite', None),
+            "SiteType2": item.get("id", {}).get("entityVariant", None)
+        }
+
+        #SITES DE COMPETIDORES
+        rawdata2 = item['data'].get('competitorSites',{})
+        if rawdata2:
+
+
+
+            for item2 in rawdata2:
+                data_dic2 ={
+                    "EntityId":id_,
+                    "competitorEntityId":item2.get('entityId'), #solo sirve para usar el endpoint de referncia
+                    "competitorSitesId":None #aqui pondremos el idsite que si conversa con la maestra de competitors
+                }
+
+                url_reference = f"/api/{item2.get('reference')}"
+
+                #obteniendo el idsite del competitor
+                rawdata3 = getSubData(url_reference,token)
+                #print(rawdata3)
+                #for item3 in rawdata3:
+                #    SiteId = item3.get('data', {}).get('competitorSite', {}).get('entityId', None)
+                    #print(type(item3['data']))
+                    
+                    #SiteId = item3['data'].get('competitorSite',{}).get('entityId',None)
+                    #d1 = item3['data'].get('competitorSite',{})
+                    #SiteId =d1.get('entityId',None)
+                SiteId_ = rawdata3['data'].get('competitorSite',{})
+                SiteId = SiteId_.get('entityId',None)
+                data_dic2["competitorSitesId"] = SiteId 
+
+
+                extracted_comp_sites.append(data_dic2)
+
+        #GRUPOS
+        rawdata3 = item['data'].get('siteGroupings')
+        if rawdata3:
+            for item3 in rawdata3:
+                data_dic3 ={
+                    "EntityId":id_,
+                    "siteGroupingValueId":item3.get('siteGroupingValueId'),
+                    "name":item3.get('name'),
+                    "type":item3.get('type'),
+                    "optionName":item3.get('optionName')
+                }
+                extracted_comp_groups.append(data_dic3)
+
+        record = {
+            "SiteInfo": data_dic,
+            "CompetitorSites": extracted_comp_sites,
+            "SiteGroupings": extracted_comp_groups
+        }
+
+        extracted_data.append(record)
+    return extracted_data
+
+
