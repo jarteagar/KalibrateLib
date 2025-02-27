@@ -15,16 +15,32 @@ def getToken(client_id,client_secret,scope,auth_url):
     return token
 
 
-def getSubData(urlApi,token):
-    authHeader = {"Authorization": "Bearer %s" %token, 'User-Agent': 'API-CLIENT'}
+#def getSubData(urlApi,token):
+#    authHeader = {"Authorization": "Bearer %s" %token, 'User-Agent': 'API-CLIENT'}
+#    queryURL = f'https://eu2.data.kalibrate.cloud{urlApi}'
+#    response = requests.get(queryURL,headers=authHeader)
+
+#    if response.status_code != 200:
+#        return ""
+#    else:
+#        rawdata = json.loads(response.text)
+#        return rawdata
+
+def getSubData(urlApi, token):
+    authHeader = {"Authorization": "Bearer %s" % token, 'User-Agent': 'API-CLIENT'}
     queryURL = f'https://eu2.data.kalibrate.cloud{urlApi}'
-    response = requests.get(queryURL,headers=authHeader)
+    response = requests.get(queryURL, headers=authHeader)
 
     if response.status_code != 200:
-        return ""
+        print(f"Error {response.status_code}: No se pudo obtener datos de {queryURL}")
+        return {}  # Retornar un diccionario vacío en lugar de una cadena vacía
     else:
-        rawdata = json.loads(response.text)
-        return rawdata
+        try:
+            return response.json()  # Usa .json() en lugar de json.loads(response.text)
+        except json.JSONDecodeError as e:
+            print(f"Error al decodificar JSON: {e}")
+            return {}
+
 
 def getData(urlApi,urlFilter,token):
 
@@ -224,17 +240,17 @@ def getColumnsSiteOwn(rawdata,token):
 
                 #obteniendo el idsite del competitor
                 rawdata3 = getSubData(url_reference,token)
-                #print(rawdata3)
-                #for item3 in rawdata3:
-                #    SiteId = item3.get('data', {}).get('competitorSite', {}).get('entityId', None)
-                    #print(type(item3['data']))
-                    
-                    #SiteId = item3['data'].get('competitorSite',{}).get('entityId',None)
-                    #d1 = item3['data'].get('competitorSite',{})
-                    #SiteId =d1.get('entityId',None)
-                SiteId_ = rawdata3['data'].get('competitorSite',{})
-                SiteId = SiteId_.get('entityId',None)
-                data_dic2["competitorSitesId"] = SiteId 
+
+                # Verifica que rawdata3 es un diccionario antes de acceder
+                if isinstance(rawdata3, dict) and isinstance(rawdata3.get('data'), dict):
+                    SiteId_ = rawdata3['data'].get('competitorSite', {})
+                    SiteId = SiteId_.get('entityId', None)
+                    data_dic2["competitorSitesId"] = SiteId
+         
+
+        #        SiteId_ = rawdata3['data'].get('competitorSite',{})
+        #        SiteId = SiteId_.get('entityId',None)
+        #        data_dic2["competitorSitesId"] = SiteId 
 
 
                 extracted_comp_sites.append(data_dic2)
@@ -260,5 +276,3 @@ def getColumnsSiteOwn(rawdata,token):
 
         extracted_data.append(record)
     return extracted_data
-
-
