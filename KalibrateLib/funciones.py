@@ -62,7 +62,10 @@ def getColumnsProd(rawdata):
             "OwnProductId": item["data"].get("ownProductId"),
             "EntityId": item["id"].get("entityId"),
             "GlobalProductEntityId": item["data"]["product"].get("entityId"),
-            "SiteId": item["data"]["site"].get("entityId")
+            "SiteId": item["data"]["site"].get("entityId"),
+            "active": 1 if item["data"].get("active",False) else 0, #nuevo
+            "deleted": 1 if item["id"].get("deleted",False) else 0 #nuevo
+
         }
         extracted_data.append(data_dict)
     return extracted_data
@@ -159,7 +162,9 @@ def getColumnsSite(rawdata):
             "brandEntityId": item.get('data', {}).get('brand', {}).get('entityId', None),
             "channelOfTradeEntityId": item.get('data', {}).get('channelOfTrade', {}).get('entityId', None),
             "distanceToNearestOwnSite": item.get('data', {}).get('distanceToNearestOwnSite', None),
-            "SiteType2": item.get("id", {}).get("entityVariant", None)
+            "SiteType2": item.get("id", {}).get("entityVariant", None),
+            "importCode": item.get('data', {}).get('importCode', None),  #nuevo atributo solicitado 27.03.2025
+            "deleted": 1 if item.get('id', {}).get('deleted', False) else 0 #nuevo
         }
 
         #SITES DE COMPETIDORES
@@ -220,20 +225,24 @@ def getColumnsSiteOwn(rawdata,token):
             "brandEntityId": item.get('data', {}).get('brand', {}).get('entityId', None),
             "channelOfTradeEntityId": item.get('data', {}).get('channelOfTrade', {}).get('entityId', None),
             "distanceToNearestOwnSite": item.get('data', {}).get('distanceToNearestOwnSite', None),
-            "SiteType2": item.get("id", {}).get("entityVariant", None)
+            "SiteType2": item.get("id", {}).get("entityVariant", None),
+            "importCode":item.get('data', {}).get('importCode', None),
+            "gpcGroup":item.get('data', {}).get('gpcGroup', None),
+            "deleted": 1 if item.get('id', {}).get('deleted', False) else 0
+            #"deleted":item.get('id', {}).get('deleted', None) ##nuevo
         }
 
         #SITES DE COMPETIDORES
         rawdata2 = item['data'].get('competitorSites',{})
         if rawdata2:
 
-
-
             for item2 in rawdata2:
                 data_dic2 ={
                     "EntityId":id_,
                     "competitorEntityId":item2.get('entityId'), #solo sirve para usar el endpoint de referncia
-                    "competitorSitesId":None #aqui pondremos el idsite que si conversa con la maestra de competitors
+                    "competitorSitesId":None, #aqui pondremos el idsite que si conversa con la maestra de competitors
+                    "distance":None, #nuevo 27.03.25
+                    "distanceUnit":None #nuevo 27.03.25
                 }
 
                 url_reference = f"/api/{item2.get('reference')}"
@@ -244,8 +253,26 @@ def getColumnsSiteOwn(rawdata,token):
                 # Verifica que rawdata3 es un diccionario antes de acceder
                 if isinstance(rawdata3, dict) and isinstance(rawdata3.get('data'), dict):
                     SiteId_ = rawdata3['data'].get('competitorSite', {})
+
+                    distance_ = rawdata3['data'].get('distance', None)
+                    distanceUnit_  = rawdata3['data'].get('distanceUnit', None)
+
+                    #delta_  = rawdata3['data'].get('delta', None)
+                    #marginDelta_  = rawdata3['data'].get('marginDelta', None)
+                    #edlDelta_  = rawdata3['data'].get('edlDelta', None)
+                    #nmDelta_  = rawdata3['data'].get('nmDelta', None)
+
                     SiteId = SiteId_.get('entityId', None)
                     data_dic2["competitorSitesId"] = SiteId
+
+                    #nuevo: 28.03.25 completando datos de distancia y margenes
+                    data_dic2["distance"] = distance_ 
+                    data_dic2["distanceUnit"] = distanceUnit_ 
+                    #data_dic2["delta"] = delta_ 
+                    #data_dic2["marginDelta"] = marginDelta_ 
+                    #data_dic2["edlDelta"] = edlDelta_ 
+                    #data_dic2["nmDelta"] = nmDelta_ 
+
          
 
         #        SiteId_ = rawdata3['data'].get('competitorSite',{})
@@ -275,4 +302,23 @@ def getColumnsSiteOwn(rawdata,token):
         }
 
         extracted_data.append(record)
+    return extracted_data
+
+#main marker y alternative marker esta en esta maestra de grupos
+def getColumnsProductsGroup(rawdata):
+    #selecciona unas columnas de toda la cadena de api
+    extracted_data = []
+    for item in rawdata:  
+        data_dict = {
+            "EntityId": item["id"].get("entityId"),
+            "entityVariant": item["id"].get("entityVariant"), #own / COMPETITOR
+            "ownProductGroupId": item["data"].get("ownProductGroupId"),
+            "globalProductGroupId": item["data"].get("globalProductGroupId"),
+            "ownSiteId": item.get("data", {}).get("ownSite", {}).get("entityId", None), #id del own
+            "alternativeMainMarker": item.get("data", {}).get("alternativeMainMarker", {}).get("entityId", None), #id competitor -alternative marker
+            "ownSiteCompetitor": item.get("data", {}).get("ownSiteCompetitor", {}).get("entityId", None), #id competitor - marker
+            "autoImplement": item["data"].get("autoImplement"),
+            "active": 1 if item["data"].get("active",False) else 0
+        }
+        extracted_data.append(data_dict)
     return extracted_data
