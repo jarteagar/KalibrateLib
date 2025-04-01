@@ -313,11 +313,12 @@ def getColumnsProductsGroup(rawdata):
             "EntityId": item["id"].get("entityId"),
             "entityVariant": item["id"].get("entityVariant"), #own / COMPETITOR
             "ownProductGroupId": item["data"].get("ownProductGroupId"),
+            "includeInOptimise": 1 if item["data"].get("includeInOptimise",False) else 0, #nuevo - optimizacion
             "globalProductGroupId": item["data"].get("globalProductGroupId"),
             "ownSiteId": item.get("data", {}).get("ownSite", {}).get("entityId", None), #id del own
             "alternativeMainMarker": item.get("data", {}).get("alternativeMainMarker", {}).get("entityId", None), #id competitor -alternative marker
             "ownSiteCompetitor": item.get("data", {}).get("ownSiteCompetitor", {}).get("entityId", None), #id competitor - marker
-            "autoImplement": item["data"].get("autoImplement"),
+            "autoImplement": 1 if item["data"].get("autoImplement",False) else 0, #item["data"].get("autoImplement"),
             "active": 1 if item["data"].get("active",False) else 0
         }
         extracted_data.append(data_dict)
