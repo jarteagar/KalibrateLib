@@ -226,11 +226,26 @@ def getColumnsSiteOwn(rawdata,token):
             "channelOfTradeEntityId": item.get('data', {}).get('channelOfTrade', {}).get('entityId', None),
             "distanceToNearestOwnSite": item.get('data', {}).get('distanceToNearestOwnSite', None),
             "SiteType2": item.get("id", {}).get("entityVariant", None),
-            "importCode":item.get('data', {}).get('importCode', None),
+            "importCode":item.get('data', {}).get('importCode', None), #este dato antes conversaba con el SITEID
             "gpcGroup":item.get('data', {}).get('gpcGroup', None),
-            "deleted": 1 if item.get('id', {}).get('deleted', False) else 0
+            "deleted": 1 if item.get('id', {}).get('deleted', False) else 0,
+            "sapSiteId":None
             #"deleted":item.get('id', {}).get('deleted', None) ##nuevo
         }
+
+        #codigo DANAUS(SITEIDSAP)
+        rawdata4 = item['data'].get('alternateImportCodes')
+        if rawdata4:
+            for item3 in rawdata4:
+                url_reference = f"/api/{item2.get('reference')}"
+         
+                #obteniendo el siteidsap
+                rawdata5 = getSubData(url_reference,token)
+                
+                # Verifica que rawdata3 es un diccionario antes de acceder
+                if isinstance(rawdata5, dict) and isinstance(rawdata5.get('data'), dict):
+                    SiteIdsap_ = rawdata3['data'].get('importCode', {})
+                    data_dic["sapSiteId"] = SiteIdsap_
 
         #SITES DE COMPETIDORES
         rawdata2 = item['data'].get('competitorSites',{})
