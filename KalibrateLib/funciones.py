@@ -237,14 +237,14 @@ def getColumnsSiteOwn(rawdata,token):
         rawdata4 = item['data'].get('alternateImportCodes')
         if rawdata4:
             for item3 in rawdata4:
-                url_reference = f"/api/{item2.get('reference')}"
+                url_reference = f"/api/{item3.get('reference')}"
          
                 #obteniendo el siteidsap
                 rawdata5 = getSubData(url_reference,token)
                 
                 # Verifica que rawdata3 es un diccionario antes de acceder
                 if isinstance(rawdata5, dict) and isinstance(rawdata5.get('data'), dict):
-                    SiteIdsap_ = rawdata3['data'].get('importCode', {})
+                    SiteIdsap_ = rawdata5['data'].get('importCode', {})
                     data_dic["sapSiteId"] = SiteIdsap_
 
         #SITES DE COMPETIDORES
